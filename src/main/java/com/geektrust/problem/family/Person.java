@@ -28,6 +28,10 @@ public class Person {
 		return name;
 	}
 
+	public Map<RelationshipType, Relationship> getRelationshipMap() {
+		return relationshipMap;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -82,37 +82,38 @@ public class FamilyService {
 	@SuppressWarnings("finally")
 	public List<Person> findRelatedPerson(String[] input, Family family) {
 		Person person;
+		Relative relative = new Relative();
 		List<Person> relatedPersons = new ArrayList<Person>();
 		try {
 			person = family.findFamilyMember(input[1]);
 
 			switch (ExtendedRelation.getExtendedRelationByStr(input[2])) {
 			case PATERNAL_UNCLE:
-				relatedPersons = Relative.getPaternalUncle(person);
+				relatedPersons = relative.getPaternalUncle(person);
 				break;
 			case MATERNAL_UNCLE:
-				relatedPersons = Relative.getMaternalUncle(person);
+				relatedPersons = relative.getMaternalUncle(person);
 				break;
 			case PATERNAL_AUNT:
-				relatedPersons = Relative.getPaternalAunt(person);
+				relatedPersons = relative.getPaternalAunt(person);
 				break;
 			case MATERNAL_AUNT:
-				relatedPersons = Relative.getMaternalAunt(person);
+				relatedPersons = relative.getMaternalAunt(person);
 				break;
 			case SISTER_IN_LAW:
-				relatedPersons = Relative.getSisterInLaw(person);
+				relatedPersons = relative.getSisterInLaw(person);
 				break;
 			case BROTHER_IN_LAW:
-				relatedPersons = Relative.getBrotherInLaw(person);
+				relatedPersons = relative.getBrotherInLaw(person);
 				break;
 			case SON:
-				relatedPersons = Relative.getSon(person);
+				relatedPersons = relative.getSon(person);
 				break;
 			case DAUGHTER:
-				relatedPersons = Relative.getDaughter(person);
+				relatedPersons = relative.getDaughter(person);
 				break;
 			case SIBLINGS:
-				relatedPersons = Relative.getSiblings(person);
+				relatedPersons = relative.getSiblings(person);
 				break;
 			default:
 				break;

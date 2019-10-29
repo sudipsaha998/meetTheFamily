@@ -15,7 +15,7 @@ public class Relative {
 			return false;
 	}
 
-	public static Person getMother(Person person) {
+	public Person getMother(Person person) {
 		for (Person p : person.getParents()) {
 			if (checkIfFemale(p)) {
 				return p;
@@ -24,7 +24,7 @@ public class Relative {
 		return null;
 	}
 
-	public static Person getFather(Person person) {
+	public Person getFather(Person person) {
 		for (Person p : person.getParents()) {
 			if (!checkIfFemale(p)) {
 				return p;
@@ -33,7 +33,7 @@ public class Relative {
 		return null;
 	}
 
-	public static List<Person> getSiblings(Person person) throws RelationNotFoundException {
+	public List<Person> getSiblings(Person person) throws RelationNotFoundException {
 		Person mother = getMother(person);
 
 		if (mother == null)
@@ -47,7 +47,7 @@ public class Relative {
 		return siblings;
 	}
 
-	public static List<Person> getBrothers(Person person) throws RelationNotFoundException {
+	public List<Person> getBrothers(Person person) throws RelationNotFoundException {
 		List<Person> brothers = getSiblings(person);
 		Iterator<Person> itr = brothers.iterator();
 
@@ -62,7 +62,7 @@ public class Relative {
 		return brothers;
 	}
 
-	public static List<Person> getSisters(Person person) throws RelationNotFoundException {
+	public List<Person> getSisters(Person person) throws RelationNotFoundException {
 		List<Person> sisters = getSiblings(person);
 		Iterator<Person> itr = sisters.iterator();
 
@@ -77,7 +77,7 @@ public class Relative {
 		return sisters;
 	}
 
-	public static List<Person> getSon(Person person) throws RelationNotFoundException {
+	public List<Person> getSon(Person person) throws RelationNotFoundException {
 		List<Person> sonList;
 
 		if (checkIfFemale(person)) {
@@ -100,7 +100,7 @@ public class Relative {
 		return sonList;
 	}
 
-	public static List<Person> getDaughter(Person person) throws RelationNotFoundException {
+	public List<Person> getDaughter(Person person) throws RelationNotFoundException {
 		List<Person> daughterList;
 
 		if (checkIfFemale(person)) {
@@ -123,7 +123,7 @@ public class Relative {
 
 	}
 
-	public static List<Person> getBrotherInLaw(Person person) throws RelationNotFoundException {
+	public List<Person> getBrotherInLaw(Person person) throws RelationNotFoundException {
 		List<Person> spouse = person.getPartner();
 		List<Person> brotherInLaws = new ArrayList<Person>();
 		try {
@@ -142,7 +142,7 @@ public class Relative {
 		return brotherInLaws;
 	}
 
-	public static List<Person> getSisterInLaw(Person person) throws RelationNotFoundException {
+	public List<Person> getSisterInLaw(Person person) throws RelationNotFoundException {
 		List<Person> spouse = person.getPartner();
 		List<Person> sisterInLaws = new ArrayList<Person>();
 		try {
@@ -162,14 +162,14 @@ public class Relative {
 
 	}
 
-	public static List<Person> getMaternalAunt(Person person) throws RelationNotFoundException {
+	public List<Person> getMaternalAunt(Person person) throws RelationNotFoundException {
 		List<Person> maternalAunt = getSisters(getMother(person));
 		if (maternalAunt.size() == 0)
 			throw new RelationNotFoundException("relation do not exist");
 		return maternalAunt;
 	}
 
-	public static List<Person> getPaternalAunt(Person person) throws RelationNotFoundException {
+	public List<Person> getPaternalAunt(Person person) throws RelationNotFoundException {
 		if (getFather(person) == null)
 			throw new RelationNotFoundException("relation do not exist");
 
@@ -179,14 +179,14 @@ public class Relative {
 		return paternalAunt;
 	}
 
-	public static List<Person> getMaternalUncle(Person person) throws RelationNotFoundException {
+	public List<Person> getMaternalUncle(Person person) throws RelationNotFoundException {
 		List<Person> maternalUncles = getBrothers(getMother(person));
 		if (maternalUncles.size() == 0)
 			throw new RelationNotFoundException("relation do not exist");
 		return maternalUncles;
 	}
 
-	public static List<Person> getPaternalUncle(Person person) throws RelationNotFoundException {
+	public List<Person> getPaternalUncle(Person person) throws RelationNotFoundException {
 		if (getFather(person) == null)
 			throw new RelationNotFoundException("relation do not exist");
 
