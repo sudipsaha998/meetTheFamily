@@ -39,60 +39,66 @@ public class Relative {
 		if (mother == null)
 			return new ArrayList<Person>();
 
-		List<Person> siblings = mother.getChildren();
-		siblings.remove(person);
+		List<Person> siblings = new ArrayList<Person>();
+
+		mother.getChildren().forEach((p) -> {
+			if (!p.equals(person))
+				siblings.add(p);
+		});
+
 		if (siblings.size() == 0) {
 			throw new RelationNotFoundException("relation do not exist");
 		}
 		return siblings;
 	}
 
-	public List<Person> getBrothers(Person person) throws RelationNotFoundException {
-		List<Person> brothers = getSiblings(person);
-		Iterator<Person> itr = brothers.iterator();
+	public List<Person> getBrothers(Person person) {
+		List<Person> brothers = new ArrayList<Person>();
 
-		while (itr.hasNext()) {
-			if (checkIfFemale(itr.next())) {
-				itr.remove();
-			}
+		try {
+			getSiblings(person).forEach((p) -> {
+				if (!checkIfFemale(p)) {
+					brothers.add(p);
+				}
+			});
+		} catch (RelationNotFoundException e) {
+			e.printStackTrace();
 		}
-		if (brothers.size() == 0) {
-			throw new RelationNotFoundException("relation do not exist");
-		}
+
 		return brothers;
 	}
 
-	public List<Person> getSisters(Person person) throws RelationNotFoundException {
-		List<Person> sisters = getSiblings(person);
-		Iterator<Person> itr = sisters.iterator();
+	public List<Person> getSisters(Person person) {
+		List<Person> sisters = new ArrayList<Person>();
 
-		while (itr.hasNext()) {
-			if (!checkIfFemale(itr.next())) {
-				itr.remove();
-			}
+		try {
+			getSiblings(person).forEach((p) -> {
+				if (checkIfFemale(p)) {
+					sisters.add(p);
+				}
+			});
+		} catch (RelationNotFoundException e) {
+			e.printStackTrace();
 		}
-		if (sisters.size() == 0) {
-			throw new RelationNotFoundException("relation do not exist");
-		}
+
 		return sisters;
 	}
 
 	public List<Person> getSon(Person person) throws RelationNotFoundException {
-		List<Person> sonList;
+		List<Person> children;
+		List<Person> sonList = new ArrayList<Person>();
 
 		if (checkIfFemale(person)) {
-			sonList = person.getChildren();
+			children = person.getChildren();
 		} else {
-			sonList = person.getPartner().get(0).getChildren();
+			children = person.getPartner().get(0).getChildren();
 		}
-
-		Iterator<Person> itr = sonList.iterator();
-
-		while (itr.hasNext()) {
-			if (checkIfFemale(itr.next())) {
-				itr.remove();
+		children.forEach((p) -> {
+			if (!checkIfFemale(p)) {
+				sonList.add(p);
 			}
-		}
+		});
+
 		if (sonList.size() == 0) {
 			throw new RelationNotFoundException("relation do not exist");
 		}
@@ -101,20 +107,20 @@ public class Relative {
 	}
 
 	public List<Person> getDaughter(Person person) throws RelationNotFoundException {
-		List<Person> daughterList;
+		List<Person> children;
+		List<Person> daughterList = new ArrayList<Person>();
 
 		if (checkIfFemale(person)) {
-			daughterList = person.getChildren();
+			children = person.getChildren();
 		} else {
-			daughterList = person.getPartner().get(0).getChildren();
+			children = person.getPartner().get(0).getChildren();
 		}
-		Iterator<Person> itr = daughterList.iterator();
 
-		while (itr.hasNext()) {
-			if (!checkIfFemale(itr.next())) {
-				itr.remove();
+		children.forEach((p) -> {
+			if (checkIfFemale(p)) {
+				daughterList.add(p);
 			}
-		}
+		});
 		if (daughterList.size() == 0) {
 			throw new RelationNotFoundException("relation do not exist");
 		}
@@ -126,36 +132,29 @@ public class Relative {
 	public List<Person> getBrotherInLaw(Person person) throws RelationNotFoundException {
 		List<Person> spouse = person.getPartner();
 		List<Person> brotherInLaws = new ArrayList<Person>();
-		try {
-			if (spouse.size() > 0) {
-				brotherInLaws = getBrothers(spouse.get(0));
-			}
-			for (Person p : getSisters(person)) {
-				brotherInLaws.addAll(p.getPartner());
-			}
-		} catch (RelationNotFoundException ex) {
-			if (brotherInLaws.size() == 0) {
-				throw new RelationNotFoundException("relation do not exist");
-			}
+		if (spouse.size() > 0) {
+			brotherInLaws = getBrothers(spouse.get(0));
 		}
-
+		for (Person p : getSisters(person)) {
+			brotherInLaws.addAll(p.getPartner());
+		}
+		if (brotherInLaws.size() == 0) {
+			throw new RelationNotFoundException("relation do not exist");
+		}
 		return brotherInLaws;
 	}
 
 	public List<Person> getSisterInLaw(Person person) throws RelationNotFoundException {
 		List<Person> spouse = person.getPartner();
 		List<Person> sisterInLaws = new ArrayList<Person>();
-		try {
-			if (spouse.size() > 0) {
-				sisterInLaws = getSisters(spouse.get(0));
-			}
-			for (Person p : getBrothers(person)) {
-				sisterInLaws.addAll(p.getPartner());
-			}
-		} catch (RelationNotFoundException ex) {
-			if (sisterInLaws.size() == 0) {
-				throw new RelationNotFoundException("relation do not exist");
-			}
+		if (spouse.size() > 0) {
+			sisterInLaws = getSisters(spouse.get(0));
+		}
+		for (Person p : getBrothers(person)) {
+			sisterInLaws.addAll(p.getPartner());
+		}
+		if (sisterInLaws.size() == 0) {
+			throw new RelationNotFoundException("relation do not exist");
 		}
 
 		return sisterInLaws;
@@ -163,6 +162,9 @@ public class Relative {
 	}
 
 	public List<Person> getMaternalAunt(Person person) throws RelationNotFoundException {
+		if (getMother(person) == null)
+			throw new RelationNotFoundException("relation do not exist");
+		
 		List<Person> maternalAunt = getSisters(getMother(person));
 		if (maternalAunt.size() == 0)
 			throw new RelationNotFoundException("relation do not exist");
@@ -180,6 +182,9 @@ public class Relative {
 	}
 
 	public List<Person> getMaternalUncle(Person person) throws RelationNotFoundException {
+		if (getMother(person) == null)
+			throw new RelationNotFoundException("relation do not exist");
+		
 		List<Person> maternalUncles = getBrothers(getMother(person));
 		if (maternalUncles.size() == 0)
 			throw new RelationNotFoundException("relation do not exist");

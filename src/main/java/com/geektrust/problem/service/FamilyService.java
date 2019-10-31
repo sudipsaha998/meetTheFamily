@@ -24,11 +24,9 @@ import com.geektrust.problem.family.Relative;
 
 public class FamilyService {
 
-	// Family family;
 	Map<String, Person> familyMembers;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Family family = new Family();
 		FamilyService familyService = new FamilyService();
 		BufferedReader br;
@@ -69,10 +67,8 @@ public class FamilyService {
 			familyMembers.put(input[2], child);
 			System.out.println(CHILD_ADDITION_SUCCEEDED);
 		} catch (PersonNotFoundException e1) {
-			// TODO Auto-generated catch block
 			System.out.println(PERSON_NOT_FOUND);
 		} catch (ChildAdditionException e) {
-			// TODO Auto-generated catch block
 			System.out.println(CHILD_ADDITION_FAILED);
 		} finally {
 			return familyMembers;
@@ -121,7 +117,6 @@ public class FamilyService {
 			}
 
 		} catch (PersonNotFoundException e) {
-			// TODO Auto-generated catch block
 			System.out.print(PERSON_NOT_FOUND);
 		}catch(RelationNotFoundException e){
 			System.out.print(NONE);

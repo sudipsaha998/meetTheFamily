@@ -125,7 +125,6 @@ public class Family {
 			
 			
 		} catch (ChildAdditionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
